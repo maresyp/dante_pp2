@@ -8,6 +8,6 @@
 #endif //DANTE_PP2_FILE_UTILS_H
 
 int file_size_from_path(const char *path);
-int file_size_from_file(FILE *f);
-void clean_stdin(void);
+//int file_size_from_file(FILE *f);
+void cleaning(void);
 int read_file(const char *filename);

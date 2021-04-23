@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void clean_stdin(void) {
+void cleaning(void) {
     int c;
     do {
         c = getchar();
@@ -22,6 +22,7 @@ int file_size_from_path(const char *path) {
     fclose(fp);
     return len;
 }
+/*
 int file_size_from_file(FILE *f) {
     if (f == NULL) { return -2; }
     int start_pos = (int)ftell(f);
@@ -30,7 +31,7 @@ int file_size_from_file(FILE *f) {
     fseek(f, start_pos, SEEK_SET);
     return len;
 }
-
+*/
 int read_file(const char *filename) {
     if (filename == NULL) return -1;
     int value = 0;
