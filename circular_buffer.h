@@ -2,10 +2,8 @@
 // Created by Mateusz Pysera on 03/04/2021.
 //
 
-#ifndef DANTE_PP2_CIRCULAR_BUFFER_H
-#define DANTE_PP2_CIRCULAR_BUFFER_H
-
-#endif //DANTE_PP2_CIRCULAR_BUFFER_H
+#ifndef INC_3_10_CIRCULAR_BUFFER_H
+#define INC_3_10_CIRCULAR_BUFFER_H
 
 struct circular_buffer_t {
     int *ptr;
@@ -29,3 +27,6 @@ int circular_buffer_empty(const struct circular_buffer_t *a);
 int circular_buffer_full(const struct circular_buffer_t *a);
 
 void circular_buffer_display(const struct circular_buffer_t *a);
+
+#endif //INC_3_10_CIRCULAR_BUFFER_H
+

@@ -13,7 +13,7 @@ int circular_buffer_create(struct circular_buffer_t *a, int N) {
     if (a->ptr == NULL) return 2;
 
     a->capacity = N;
-    a->begin = -1;
+    a->begin = 0;
     a->end = 0;
     a->full = 0;
     return 0;
@@ -26,17 +26,17 @@ void circular_buffer_destroy(struct circular_buffer_t *a) {
 int circular_buffer_create_struct(struct circular_buffer_t **cb, int N) {
     if (cb == NULL || N <= 0) return 1;
     cb = malloc(sizeof(struct circular_buffer_t));
-    if (cb == NULL) return 2;
-    int res = circular_buffer_create((struct circular_buffer_t *) cb, N);
+    int res = circular_buffer_create(*(cb), N);
     if (res == 2) {
-        circular_buffer_destroy((struct circular_buffer_t *) cb);
+        circular_buffer_destroy_struct(cb);
         return 2;
     }
     return 0;
 }
 
 void circular_buffer_destroy_struct(struct circular_buffer_t **a) {
-    return;
+    if (a == NULL) return;
+    free(a);
 }
 
 int circular_buffer_push_back(struct circular_buffer_t *cb, int value) {

@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "file_struct_utils.h"
 
-struct point_t { int x; int y; };
 
 struct point_t* set(struct point_t* p, int x, int y) {
     if (p == NULL) return NULL;
@@ -44,6 +44,19 @@ int save_point_b(const char *filename, const struct point_t* p) {
     if (fwrite(p, sizeof(struct point_t), 1, fp) != 1) {
         fclose(fp);
         return 3;
+    }
+    fclose(fp);
+    return 0;
+}
+int save_points_b(const char *filename, const struct point_t* p, unsigned int N) {
+    if (filename == NULL || p == NULL || N <= 0) return 1;
+    FILE *fp; fp = fopen(filename, "wb");
+    if (fp == NULL) return 2;
+    for (unsigned int i = 0; i < N; ++i) {
+        if (fwrite((p + i), sizeof(struct point_t), 1, fp) != 1) {
+            fclose(fp);
+            return 3;
+        }
     }
     fclose(fp);
     return 0;
