@@ -25,7 +25,6 @@ int circular_buffer_pop_back(struct circular_buffer_t *a, int *err_code);
 
 int circular_buffer_empty(const struct circular_buffer_t *a);
 int circular_buffer_full(const struct circular_buffer_t *a);
-
 void circular_buffer_display(const struct circular_buffer_t *a);
 
 #endif //INC_3_10_CIRCULAR_BUFFER_H

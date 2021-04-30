@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "file_utils.h"
+#include "../file_utils.h"
 
 void clean_stdin(void) {
     int c;

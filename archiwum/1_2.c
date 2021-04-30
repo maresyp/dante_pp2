@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "file_utils.h"
+#include "../file_utils.h"
 
 int main(){
     printf("Podaj sciezke do pliku\n");
