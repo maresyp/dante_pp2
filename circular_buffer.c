@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "circular_buffer.h"
+
 
 int circular_buffer_create(struct circular_buffer_t *a, int N) {
     if (a == NULL || N <= 0) return 1;
@@ -53,17 +55,21 @@ int circular_buffer_push_back(struct circular_buffer_t *cb, int value) {
         cb->end++;
         if (cb->end >= cb->capacity) {
             cb->end = 0;
-            cb->begin = 0;
+        }
+        if (cb->end == cb->begin) {
             cb->full = 1;
         }
     } else {
-        // buffer is already full
-        if (cb->end >= cb->capacity) cb->end = 0;
-        if (cb->begin >= cb->capacity) cb->begin = 0;
+//        // buffer is already full
+//        if (cb->end >= cb->capacity) cb->end = 0;
+//        if (cb->begin >= cb->capacity) cb->begin = 0;
 
         *(cb->ptr + cb->end) = value;
         cb->begin++;
-        cb->end++;
+        if (cb->begin >= cb->capacity) {
+            cb->begin = 0;
+        }
+        cb->end = cb->begin;
     }
     return 0;
 }
@@ -122,13 +128,14 @@ int circular_buffer_empty(const struct circular_buffer_t *a) {
 }
 int circular_buffer_full(const struct circular_buffer_t *a) {
     if (a == NULL || a->ptr == NULL || a->capacity <= 0 || a->end > a->capacity || a->begin > a->capacity || a->end < 0 || a->begin < 0) return -1;
-    if ( ((a->end + 1) == a->begin) || a->full == 1) return 1;
+    if (a->full == 1) return 1;
     return 0;
 }
 void circular_buffer_display(const struct circular_buffer_t *a) {
-    if (a == NULL || a->ptr == NULL || a->capacity <= 0 || a->end > a->capacity || a->begin > a->capacity || a->end < 0 || a->begin < 0) return;
+    if (a == NULL || a->ptr == NULL || a->capacity <= 0 || a->end >= a->capacity || a->begin >= a->capacity || a->end < 0 || a->begin < 0 || circular_buffer_empty(a)) return;
     int start = a->begin;
     if (a->full == 1) printf("%d ", *(a->ptr + start++));
+    if (start >= a->capacity) start = 0;
     while (start != a->end) {
         printf("%d ", *(a->ptr + start));
         start++;

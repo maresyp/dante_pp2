@@ -1,39 +1,50 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include <math.h>
+#include <stdarg.h>
 
-int is_equal(int a, int b) {
-    return !(a ^ b);
+int stats(int *sum, float *avg, int num, ...) {
+    if (sum == NULL || avg == NULL || num <= 0) return 1;
+    va_list vaList;
+    va_start(vaList, num);
+    *sum = 0;
+    for (int i = 0; i < num; ++i) {
+        *sum += va_arg(vaList, int );
+    }
+    *avg = (float) *sum / (float) num;
+    va_end(vaList);
+    return 0;
 }
-int is_negative(int value) {
-    if (is_equal(0, value)) return 0;
-    int tmp = (value & 0x80000000);
-    if (is_equal(tmp, 0)) return 0;
-    return 1;
-}
-int main(){
-    printf("zapodaj:\n");
-    int a,b;
-    if (!(is_equal(scanf("%d %d", &a, &b), 2))) {
+
+int main() {
+    printf("Zapodaj liczbe elemetow: ");
+    int elem;
+    if (scanf("%d", &elem) != 1) {
         printf("Incorrect input");
         return 1;
-    } else {
-        int res = is_equal(a, b);
-        if (is_equal(res, 0)) {
-            printf("nierowne\n");
-        } else {
-            printf("rowne\n");
-        }
-        if (!is_negative(a)) {
-            printf("nieujemna ");
-        } else {
-            printf("ujemna ");
-        }
-        if (!is_negative(b)) {
-            printf("nieujemna");
-        } else {
-            printf("ujemna");
+    }
+    if (elem < 1 || elem > 3) {
+        printf("Incorrect input data");
+        return 2;
+    }
+    printf("Zapodaj liczby: ");
+    int tab[3];
+    for (int i = 0; i < elem; ++i) {
+        if (scanf("%d", &tab[i]) != 1) {
+            printf("Incorrect input");
+            return 1;
         }
     }
-    return 0;
+    int sum; float avg;
+    if (elem == 1) {
+        stats(&sum, &avg, elem, tab[0]);
+    }
+    if (elem == 2) {
+        stats(&sum, &avg, elem, tab[0], tab[1]);
+    }
+    if (elem == 3) {
+        stats(&sum, &avg, elem, tab[0], tab[1], tab[2]);
+    }
+    printf("%d %f",sum, avg);
 }

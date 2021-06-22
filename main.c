@@ -1,96 +1,200 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "doubly_linked_list.h"
 #include <string.h>
-#include "circular_buffer.h"
 
+int main() {
+    char * x = malloc(5);
+    char * y = x;
+    strcpy(y, "test");
+    free(x);
+    printf("%s", y);
+}
+/*
 int main(){
-    /*
-    const int array[] = {-1, 29, -68, 79, 9, -88, -69, -68, 57, 34, 63, -51, 22, -8, -21, 23, 12, -98};
-    struct circular_buffer_t ptr = { .begin = 4, .end = 1, .capacity = -6, .full = 0 };
-    int res = circular_buffer_create(&ptr, 18);
-    for (int i = 0; i < 18; ++i)
-    {
-        res = circular_buffer_push_back(&ptr, array[i]);
-    }
-    circular_buffer_display(&ptr);
-     */
-    printf("Zapodaj rozmiar bufora: ");
-    int buf_size;
-    if (scanf("%d", &buf_size) != 1) {
-        printf("Incorrect input");
-        return 1;
-    }
-    if (buf_size <= 0) {
-        printf("Incorrect input data");
-        return 2;
-    }
-    struct circular_buffer_t *buffer;
-    int res = circular_buffer_create_struct(&buffer, buf_size);
-    if (res == 2) {
+    struct doubly_linked_list_t *dll = dll_create();
+    if (dll == NULL) {
         printf("Failed to allocate memory");
         return 8;
     }
-    int user_input = 1;
-    int value;
-    int err_code;
-    while (user_input != 0) {
-        printf("Co chcesz zrobic ? ");
-        if (scanf("%d", &user_input) != 1) {
+    int input;
+    do {
+        printf("Podaj operacje: ");
+        if (scanf("%d", &input) != 1) {
             printf("Incorrect input");
-            circular_buffer_destroy_struct(&buffer);
+            dll_clear(dll);
+            free(dll);
             return 1;
         }
-        if (user_input < 0 || user_input > 6) {
+        if (input < 0 || input > 14) {
             printf("Incorrect input data\n");
+            continue;
         }
-        if (user_input == 1) {
+        if (input == 1) {
             printf("Podaj liczbe: ");
+            int value;
             if (scanf("%d", &value) != 1) {
                 printf("Incorrect input");
-                circular_buffer_destroy_struct(&buffer);
+                dll_clear(dll);
+                free(dll);
                 return 1;
             }
-            circular_buffer_push_back(buffer, value);
-        }
-        if (user_input == 2) {
-            res = circular_buffer_pop_back(buffer, &err_code);
-            if (err_code == 2) {
-                printf("Buffer is empty\n");
-            } else {
-                printf("%d\n", res);
+            int res = dll_push_back(dll, value);
+            if (res == 2) {
+                printf("Failed to allocate memory");
+                dll_clear(dll);
+                free(dll);
+                return 8;
             }
         }
-        if (user_input == 3) {
-            res = circular_buffer_pop_front(buffer, &err_code);
-            if (err_code == 2) {
-                printf("Buffer is empty\n");
+        if (input == 2) {
+            int err;
+            int value = dll_pop_back(dll, &err);
+            if (err == 1) {
+                printf("List is empty\n");
             } else {
-                printf("%d\n", res);
+                printf("%d\n", value);
             }
         }
-        if (user_input == 4) {
-            if (circular_buffer_empty(buffer) == 1) {
-                printf("Buffer is empty\n");
+        if (input == 3) {
+            printf("Podaj liczbe: ");
+            int value;
+            if(scanf("%d", &value) != 1) {
+                printf("Incorrect input");
+                dll_clear(dll);
+                free(dll);
+                return 1;
+            }
+            int res = dll_push_front(dll, value);
+            if (res == 2) {
+                printf("Failed to allocate memory");
+                dll_clear(dll);
+                free(dll);
+                return 8;
+            }
+        }
+        if (input == 4) {
+            int err;
+            int value = dll_pop_front(dll, &err);
+            if (err == 1) {
+                printf("List is empty\n");
             } else {
-                circular_buffer_display(buffer);
+                printf("%d\n", value);
+            }
+        }
+        if (input == 5) {
+            int value, index;
+            printf("Podaj liczbe: ");
+            if(scanf("%d", &value) != 1) {
+                printf("Incorrect input");
+                dll_clear(dll);
+                free(dll);
+                return 1;
+            }
+            printf("Podaj index : ");
+            if(scanf("%d", &index) != 1) {
+                printf("Incorrect input");
+                dll_clear(dll);
+                free(dll);
+                return 1;
+            }
+            int res = dll_insert(dll, index, value);
+            if (res == 2) {
+                printf("Failed to allocate memory");
+                dll_clear(dll);
+                free(dll);
+                return 8;
+            } else if (res == 1) {
+                printf("Index out of range\n");
+            }
+        }
+        if (input == 6) {
+            if (dll_is_empty(dll)) {
+                printf("List is empty\n");
+            } else {
+                int index;
+                printf("Podaj index: ");
+                if (scanf("%d", &index) != 1) {
+                    printf("Incorrect input");
+                    dll_clear(dll);
+                    free(dll);
+                    return 1;
+                }
+                int err;
+                int value = dll_remove(dll, index, &err);
+                if (err == 1) {
+                    printf("Index out of range\n");
+                } else {
+                    printf("%d\n", value);
+                }
+            }
+        }
+        if (input == 7) {
+            int err;
+            int value = dll_back(dll, &err);
+            if (err == 1) {
+                printf("List is empty\n");
+            } else {
+                printf("%d\n", value);
+            }
+        }
+        if (input == 8) {
+            int err;
+            int value = dll_front(dll, &err);
+            if (err == 1) {
+                printf("List is empty\n");
+            } else {
+                printf("%d\n", value);
+            }
+        }
+        if (input == 9) {
+            printf("%d\n", dll_is_empty(dll));
+        }
+        if (input == 10) {
+            printf("%d\n", dll_size(dll));
+        }
+        if (input == 11) {
+            dll_clear(dll);
+        }
+        if (input == 12) {
+            if (dll_is_empty(dll)) {
+                printf("List is empty\n");
+            } else {
+                int err, index;
+                printf("Podaj index: ");
+                if (scanf("%d", &index) != 1) {
+                    printf("Incorrect input");
+                    dll_clear(dll);
+                    free(dll);
+                    return 1;
+                }
+                int value = dll_at(dll,index, &err);
+                if (err == 1) {
+                    printf("Index out of range\n");
+                } else {
+                    printf("%d\n", value);
+                }
+            }
+        }
+        if (input == 13) {
+            if (dll_is_empty(dll)) {
+                printf("List is empty\n");
+            } else {
+                dll_display(dll);
                 printf("\n");
             }
         }
-        if (user_input == 5) {
-            if (circular_buffer_empty(buffer) == 1) {
-                printf("1\n");
+        if (input == 14) {
+            if (dll_is_empty(dll)) {
+                printf("List is empty\n");
             } else {
-                printf("0\n");
+                dll_display_reverse(dll);
+                printf("\n");
             }
         }
-        if (user_input == 6) {
-            if (circular_buffer_full(buffer) == 1) {
-                printf("1\n");
-            } else {
-                printf("0\n");
-            }
-        }
-    }
-
+    } while (input != 0);
+    dll_clear(dll);
+    free(dll);
     return 0;
 }
+*/
